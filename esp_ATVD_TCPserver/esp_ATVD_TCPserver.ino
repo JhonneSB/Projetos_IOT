@@ -45,9 +45,10 @@ void setup() {
 void loop() {
   tcp();
   if (reqTemp == true) {
+    float temperatura = dht.readTemperature();
+    Temp=temperatura;
     lcd.setCursor(0, 1);
     lcd.print("Temp: ");
-    Temp = String(Temp, 1);
     lcd.print(Temp);
   }
 }
@@ -106,7 +107,7 @@ void tcp() {
           return;
         }
         reqTemp = true;
-        Temp=temperatura;
+        Temp = String(temperatura, 1);
       }
     }
   } else {
