@@ -1,0 +1,494 @@
+[
+    {
+        "id": "700a8888378f836a",
+        "type": "tab",
+        "label": "Fluxo 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "cdfbbf29a08ff42e",
+        "type": "inject",
+        "z": "700a8888378f836a",
+        "name": "Create the table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 280,
+        "y": 420,
+        "wires": [
+            [
+                "618196f08fabb042"
+            ]
+        ]
+    },
+    {
+        "id": "618196f08fabb042",
+        "type": "template",
+        "z": "700a8888378f836a",
+        "name": "modelo",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "CREATE TABLE IF NOT EXISTS Historico (\n    id INT AUTO_INCREMENT PRIMARY KEY,\n    temperatura float NOT NULL,\n    umidade float NOT NULL,\n    distancia float not null,\n    led boolean NOT NULL\n);",
+        "output": "str",
+        "x": 540,
+        "y": 420,
+        "wires": [
+            [
+                "cbfb00d11d0509cf"
+            ]
+        ]
+    },
+    {
+        "id": "cbfb00d11d0509cf",
+        "type": "mysql",
+        "z": "700a8888378f836a",
+        "mydb": "ae58e06f3ad95483",
+        "name": "NodeMySQL_Create",
+        "x": 820,
+        "y": 420,
+        "wires": [
+            [
+                "1aeb2c5b3250f634"
+            ]
+        ]
+    },
+    {
+        "id": "1aeb2c5b3250f634",
+        "type": "debug",
+        "z": "700a8888378f836a",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "d78c8cb0affe9761",
+        "type": "inject",
+        "z": "700a8888378f836a",
+        "name": "Insert the data into the table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 320,
+        "y": 520,
+        "wires": [
+            [
+                "3a9fab3e8a1886a8"
+            ]
+        ]
+    },
+    {
+        "id": "3a9fab3e8a1886a8",
+        "type": "template",
+        "z": "700a8888378f836a",
+        "name": "modelo",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "INSERT INTO Produto (descricao, dataTempo, preco)\nVALUES ('Caneta', CURTIME(), 2);",
+        "output": "str",
+        "x": 540,
+        "y": 520,
+        "wires": [
+            [
+                "1c5b9da7a260b6e1"
+            ]
+        ]
+    },
+    {
+        "id": "1c5b9da7a260b6e1",
+        "type": "mysql",
+        "z": "700a8888378f836a",
+        "mydb": "ae58e06f3ad95483",
+        "name": "NodeMySQL_Insert",
+        "x": 810,
+        "y": 520,
+        "wires": [
+            [
+                "6b7e13c89b074c05"
+            ]
+        ]
+    },
+    {
+        "id": "6b7e13c89b074c05",
+        "type": "debug",
+        "z": "700a8888378f836a",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "891df8094a115d1f",
+        "type": "inject",
+        "z": "700a8888378f836a",
+        "name": "Retrieve data from table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 300,
+        "y": 620,
+        "wires": [
+            [
+                "9a3067143318cbc3"
+            ]
+        ]
+    },
+    {
+        "id": "9a3067143318cbc3",
+        "type": "template",
+        "z": "700a8888378f836a",
+        "name": "modelo",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT * FROM Produto;",
+        "output": "str",
+        "x": 540,
+        "y": 620,
+        "wires": [
+            [
+                "d0ab6e7a864aa474"
+            ]
+        ]
+    },
+    {
+        "id": "d0ab6e7a864aa474",
+        "type": "mysql",
+        "z": "700a8888378f836a",
+        "mydb": "ae58e06f3ad95483",
+        "name": "NodeMySQL_Select",
+        "x": 820,
+        "y": 620,
+        "wires": [
+            [
+                "8fbbb36c6324e660"
+            ]
+        ]
+    },
+    {
+        "id": "8fbbb36c6324e660",
+        "type": "debug",
+        "z": "700a8888378f836a",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "f56bb45e65ab7a4d",
+        "type": "inject",
+        "z": "700a8888378f836a",
+        "name": "Delete data from the table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 310,
+        "y": 720,
+        "wires": [
+            [
+                "c12571c0a78bd629"
+            ]
+        ]
+    },
+    {
+        "id": "c12571c0a78bd629",
+        "type": "template",
+        "z": "700a8888378f836a",
+        "name": "modelo",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 540,
+        "y": 720,
+        "wires": [
+            [
+                "a1ac2b3a49e33a31"
+            ]
+        ]
+    },
+    {
+        "id": "a1ac2b3a49e33a31",
+        "type": "mysql",
+        "z": "700a8888378f836a",
+        "mydb": "ae58e06f3ad95483",
+        "name": "NodeMySQL_Delete",
+        "x": 820,
+        "y": 720,
+        "wires": [
+            [
+                "45033995a4b325c4"
+            ]
+        ]
+    },
+    {
+        "id": "45033995a4b325c4",
+        "type": "debug",
+        "z": "700a8888378f836a",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "84abbd1090202d43",
+        "type": "inject",
+        "z": "700a8888378f836a",
+        "name": "Update data from the table",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 310,
+        "y": 820,
+        "wires": [
+            [
+                "4aeeb1d2c4655b78"
+            ]
+        ]
+    },
+    {
+        "id": "4aeeb1d2c4655b78",
+        "type": "template",
+        "z": "700a8888378f836a",
+        "name": "modelo",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 540,
+        "y": 820,
+        "wires": [
+            [
+                "5ac9353abb4a6608"
+            ]
+        ]
+    },
+    {
+        "id": "5ac9353abb4a6608",
+        "type": "mysql",
+        "z": "700a8888378f836a",
+        "mydb": "ae58e06f3ad95483",
+        "name": "NodeMySQL_Update",
+        "x": 820,
+        "y": 820,
+        "wires": [
+            [
+                "13be58a1c0358e15"
+            ]
+        ]
+    },
+    {
+        "id": "13be58a1c0358e15",
+        "type": "debug",
+        "z": "700a8888378f836a",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "2cf80fbdfa94c405",
+        "type": "inject",
+        "z": "700a8888378f836a",
+        "name": "Drop the table if it exist",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 300,
+        "y": 920,
+        "wires": [
+            [
+                "0b778a924d016fc0"
+            ]
+        ]
+    },
+    {
+        "id": "0b778a924d016fc0",
+        "type": "template",
+        "z": "700a8888378f836a",
+        "name": "modelo",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 540,
+        "y": 920,
+        "wires": [
+            [
+                "53f2ae435a92365c"
+            ]
+        ]
+    },
+    {
+        "id": "53f2ae435a92365c",
+        "type": "mysql",
+        "z": "700a8888378f836a",
+        "mydb": "ae58e06f3ad95483",
+        "name": "NodeMySQL_Drop ",
+        "x": 810,
+        "y": 920,
+        "wires": [
+            [
+                "96eda94435327e85"
+            ]
+        ]
+    },
+    {
+        "id": "96eda94435327e85",
+        "type": "debug",
+        "z": "700a8888378f836a",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "ae58e06f3ad95483",
+        "type": "MySQLdatabase",
+        "name": "NodeRedMySQL",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "dbnodeproduto",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
