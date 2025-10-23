@@ -1,0 +1,23 @@
+[
+    {
+        "id": "af4acfee68bc3611",
+        "type": "function",
+        "z": "39c6e012e231c2bd",
+        "name": "Agregar",
+        "func": "// 🧩 Lista de variáveis esperadas\nconst expectedVars = [\n    \"humi\", \"temp\", \"ai00\", \"ai01\",\n    \"psts\", \"vrms\", \"irms\", \"appp\", \"actp\", \"reap\"\n];\n\n// 🔄 Recupera o JSON acumulado do contexto local (memória)\nlet data = context.get(\"data\") || {};\n\n// 🎯 DEBUG: Estado atual ANTES do processamento\nnode.warn(\"═══════════════════════════════════════\");\nnode.warn(\"🔄 INICIANDO PROCESSAMENTO\");\nnode.warn(\"═══════════════════════════════════════\");\n\n// DEBUG MAIS RESUMIDO para não poluir\nlet receivedCount = Object.keys(data).length;\nlet missingCount = expectedVars.length - receivedCount;\nnode.warn(\"📊 Progresso: \" + receivedCount + \"/\" + expectedVars.length + \" variáveis\");\n\n// 🔍 Garante que o payload é um array de objetos [{variable, value}]\nlet arr = msg.payload;\n\nif (typeof arr === \"string\") {\n    // Corrige mensagens com \"value\":SEM_ASPAS → \"value\":\"SEM_ASPAS\"\n    arr = arr.replace(/\"value\":([A-Za-z_]+)/g, '\"value\":\"$1\"');\n    try {\n        arr = JSON.parse(arr);\n    } catch (e) {\n        node.error(\"❌ ERRO no parse JSON: \" + e.message);\n        return null;\n    }\n}\n\n// Se for objeto único, converte em array\nif (!Array.isArray(arr)) {\n    arr = [arr];\n}\n\n// 🧠 Atualiza o dicionário de variáveis recebidas\nif (arr.length > 0 && arr[0].variable) {\n    let item = arr[0];\n    \n    // DEBUG MAIS LIMPO - só mostra variável sendo processada\n    node.warn(\"🎯 Processando: \" + item.variable + \" = \" + item.value);\n    \n    // Verifica se é uma variável esperada\n    if (expectedVars.includes(item.variable)) {\n        data[item.variable] = item.value;\n    }\n}\n\n// 💾 Salva novamente no contexto\ncontext.set(\"data\", data);\n\n// ⚙️ Verifica se todas as variáveis esperadas já chegaram\nlet allReceived = expectedVars.every(v => data.hasOwnProperty(v));\nlet missingVars = expectedVars.filter(v => !data.hasOwnProperty(v));\n\nif (allReceived) {\n    node.warn(\"🚀 ✅ PACOTE COMPLETO ENVIADO!\");\n    node.warn(\"   Conteúdo: \" + JSON.stringify(data));\n    \n    msg.payload = data;\n    return msg;\n} else {\n    // Mostra progresso a cada 5 mensagens ou quando faltam poucas variáveis\n    let currentCount = Object.keys(data).length;\n    if (currentCount % 3 === 0 || missingVars.length <= 2) {\n        node.warn(\"⏳ Aguardando: \" + missingVars.join(\", \"));\n    }\n}\n\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 260,
+        "wires": [
+            [
+                "9a49991dbf1e6ed6",
+                "mqtt_out_smart"
+            ]
+        ]
+    }
+]
